@@ -1,0 +1,201 @@
+---
+title: "Traffic Models POC"
+author: "Enrique Otanez"
+date: "6/20/2021"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = normalizePath("D:/Templates/Traffic Stuff"))
+```
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(broom)
+library(ggpubr)
+```
+
+
+```{r}
+setwd("D:/Templates/Traffic Stuff")
+traffic <- read.csv("Dataset1stModel.csv")
+```
+
+```{r}
+traffic
+```
+
+```{r}
+traffic$WindSouth <- ifelse(traffic$Weather.windDirection == 'S', 1, 0)
+traffic$WindNorth <- ifelse(traffic$Weather.windDirection == 'N', 1, 0)
+traffic$WindEast <- ifelse(traffic$Weather.windDirection == 'E', 1, 0)
+traffic$WindWest <- ifelse(traffic$Weather.windDirection == 'w', 1, 0)
+traffic$WindNorthEast <- ifelse(traffic$Weather.windDirection == 'NE', 1, 0)
+traffic$WindNorthWest <- ifelse(traffic$Weather.windDirection == 'NW', 1, 0)
+traffic$WindSouthEast <- ifelse(traffic$Weather.windDirection == 'SE', 1, 0)
+traffic$WindSouthWest <- ifelse(traffic$Weather.windDirection == 'SW', 1, 0)
+```
+
+
+```{r}
+traffic <- subset(traffic, select = c(JamsDelay, TrafficIndexLive, UpdateTime, JamsLength, JamsCount, TrafficIndexWeekAgo, Weather.temperature, Weather.feelsLike, Weather.windSpeed, Weather.sunProbability, Weather.precipitationProbability, Weather.thunderProbability, Weather.precipitation, Weather.pressure, Weather.relativeHumidity, WindSouth, WindNorth, WindEast, WindWest, WindNorthEast, WindNorthWest, WindSouthEast, WindSouthWest))
+
+traffic
+```
+
+```{r}
+JamsDelay_scat <- ggplot(traffic, aes(x = JamsDelay, y = TrafficIndexLive)) + geom_point() + stat_smooth(method = "lm", col = "#C42126")
+JamsLength_scat <- ggplot(traffic, aes(x = JamsLength, y = TrafficIndexLive)) + geom_point() + stat_smooth(method = "lm", col = "#C42126")
+JamsCount_scat <- ggplot(traffic, aes(x = JamsCount, y = TrafficIndexLive)) + geom_point() + stat_smooth(method = "lm", col = "#C42126")
+Weather.temperature_scat <- ggplot(traffic, aes(x = Weather.temperature, y = TrafficIndexLive)) + geom_point() + stat_smooth(method = "lm", col = "#C42126")
+Weather.feelsLike_scat <- ggplot(traffic, aes(x = Weather.feelsLike, y = TrafficIndexLive)) + geom_point() + stat_smooth(method = "lm", col = "#C42126")
+Weather.sunProbability_scat <- ggplot(traffic, aes(x = Weather.sunProbability, y = TrafficIndexLive)) + geom_point() + stat_smooth(method = "lm", col = "#C42126")
+Weather.precipitationProbability_scat <- ggplot(traffic, aes(x = Weather.precipitationProbability, y = TrafficIndexLive)) + geom_point() + stat_smooth(method = "lm", col = "#C42126")
+Weather.thunderProbability_scat <- ggplot(traffic, aes(x = Weather.thunderProbability, y = TrafficIndexLive)) + geom_point() + stat_smooth(method = "lm", col = "#C42126")
+Weather.precipitation_scat <- ggplot(traffic, aes(x = Weather.precipitation, y = TrafficIndexLive)) + geom_point() + stat_smooth(method = "lm", col = "#C42126")
+Weather.pressure_scat <- ggplot(traffic, aes(x = Weather.pressure, y = TrafficIndexLive)) + geom_point() + stat_smooth(method = "lm", col = "#C42126")
+Weather.relativeHumidity_scat <- ggplot(traffic, aes(x = Weather.relativeHumidity, y = TrafficIndexLive)) + geom_point() + stat_smooth(method = "lm", col = "#C42126")
+WindSouth_scat <- ggplot(traffic, aes(x = WindSouth, y = TrafficIndexLive)) + geom_point() + stat_smooth(method = "lm", col = "#C42126")
+WindNorth_scat <- ggplot(traffic, aes(x = WindNorth, y = TrafficIndexLive)) + geom_point() + stat_smooth(method = "lm", col = "#C42126")
+WindEast_scat <- ggplot(traffic, aes(x = WindEast, y = TrafficIndexLive)) + geom_point() + stat_smooth(method = "lm", col = "#C42126")
+WindWest_scat <- ggplot(traffic, aes(x = WindWest, y = TrafficIndexLive)) + geom_point() + stat_smooth(method = "lm", col = "#C42126")
+WindNorthEast_scat <- ggplot(traffic, aes(x = WindNorthEast, y = TrafficIndexLive)) + geom_point() + stat_smooth(method = "lm", col = "#C42126")
+WindNorthWest_scat <- ggplot(traffic, aes(x = WindNorthWest, y = TrafficIndexLive)) + geom_point() + stat_smooth(method = "lm", col = "#C42126")
+WindSouthEast_scat <- ggplot(traffic, aes(x = WindSouthEast, y = TrafficIndexLive)) + geom_point() + stat_smooth(method = "lm", col = "#C42126")
+WindSouthWest_scat <- ggplot(traffic, aes(x = WindSouthWest, y = TrafficIndexLive)) + geom_point() + stat_smooth(method = "lm", col = "#C42126")
+```
+
+```{r}
+JamsDelay_scat
+JamsLength_scat
+JamsCount_scat
+Weather.temperature_scat
+Weather.feelsLike_scat
+Weather.sunProbability_scat
+Weather.precipitationProbability_scat
+Weather.thunderProbability_scat
+Weather.precipitation_scat
+Weather.pressure_scat
+Weather.relativeHumidity_scat
+WindSouth_scat
+WindNorth_scat
+WindEast_scat
+WindWest_scat
+WindNorthEast_scat
+WindNorthWest_scat
+WindSouthEast_scat
+WindSouthWest_scat
+```
+
+```{r}
+TrafficIndexLive_hist <- ggplot(traffic, aes(x = TrafficIndexLive)) + geom_histogram()
+JamsDelay_hist <- ggplot(traffic, aes(x = log(JamsDelay))) + geom_histogram()
+JamsLength_hist <- ggplot(traffic, aes(x = log(JamsLength))) + geom_histogram()
+JamsCount_hist <- ggplot(traffic, aes(x = log(JamsCount))) + geom_histogram()
+Weather.temperature_hist <- ggplot(traffic, aes(x = Weather.temperature)) + geom_histogram()
+Weather.feelsLike_hist <- ggplot(traffic, aes(x = Weather.feelsLike)) + geom_histogram()
+Weather.sunProbability_hist <- ggplot(traffic, aes(x = Weather.sunProbability)) + geom_histogram()
+Weather.precipitationProbability_hist <- ggplot(traffic, aes(x = Weather.precipitationProbability)) + geom_histogram()
+Weather.thunderProbability_hist <- ggplot(traffic, aes(x = Weather.thunderProbability)) + geom_histogram()
+Weather.precipitation_hist <- ggplot(traffic, aes(x = Weather.precipitation)) + geom_histogram()
+Weather.pressure_hist <- ggplot(traffic, aes(x = Weather.pressure)) + geom_histogram()
+Weather.relativeHumidity_hist <- ggplot(traffic, aes(x = Weather.relativeHumidity)) + geom_histogram()
+WindSouth_hist <- ggplot(traffic, aes(x = WindSouth)) + geom_histogram()
+WindNorth_hist <- ggplot(traffic, aes(x = WindNorth)) + geom_histogram()
+WindEast_hist <- ggplot(traffic, aes(x = WindEast)) + geom_histogram()
+WindWest_hist <- ggplot(traffic, aes(x = WindWest)) + geom_histogram()
+WindNorthEast_hist <- ggplot(traffic, aes(x = WindNorthEast)) + geom_histogram() 
+WindNorthWest_hist <- ggplot(traffic, aes(x = WindNorthWest)) + geom_histogram() 
+WindSouthEast_hist <- ggplot(traffic, aes(x = WindSouthEast)) + geom_histogram()
+WindSouthWest_hist <- ggplot(traffic, aes(x = WindSouthWest)) + geom_histogram()
+```
+
+```{r}
+TrafficIndexLive_hist
+JamsDelay_hist
+JamsLength_hist
+JamsCount_hist
+Weather.temperature_hist
+Weather.feelsLike_hist
+Weather.sunProbability_hist
+Weather.precipitationProbability_hist
+Weather.thunderProbability_hist
+Weather.precipitation_hist
+Weather.pressure_hist
+Weather.relativeHumidity_hist
+WindSouth_hist
+WindNorth_hist
+WindEast_hist
+WindWest_hist
+WindNorthEast_hist
+WindSouthEast_hist
+WindSouthWest_hist
+```
+
+```{r}
+traffic$logJamsDelay <- log(traffic$JamsDelay)
+traffic$logJamsDelay[!is.finite(traffic$logJamsDelay)] <- 0
+
+traffic$logJamsLength <- log(traffic$JamsLength)
+traffic$logJamsLength[!is.finite(traffic$logJamsLength)] <- 0
+
+traffic$logJamsCount <- log(traffic$JamsCount)
+traffic$logJamsCount[!is.finite(traffic$logJamsCount)] <- 0
+
+#traffic$logpressure <- log(traffic$Weather.pressure)
+#traffic$logpressure[!is.finite(traffic$logpressure)] <- 0
+
+#traffic$logrelativeHumidity <- log(traffic$Weather.relativeHumidity)
+#traffic$logrelativeHumidity[!is.finite(traffic$logrelativeHumidity)] <- 0
+
+
+traffic
+
+```
+
+```{r}
+logJamsDelay_scat <- ggplot(traffic, aes(x = logJamsDelay, y = TrafficIndexLive)) + geom_point() + stat_smooth(method = "lm", col = "#C42126")
+logJamsLength_scat <- ggplot(traffic, aes(x = logJamsLength, y = TrafficIndexLive)) + geom_point() + stat_smooth(method = "lm", col = "#C42126")
+logJamsCount_scat <- ggplot(traffic, aes(x = logJamsCount, y = TrafficIndexLive)) + geom_point() + stat_smooth(method = "lm", col = "#C42126")
+
+#logrelativeHumidity_scat <- ggplot(traffic, aes(x = logrelativeHumidity, y = TrafficIndexLive)) + geom_point() + stat_smooth(method = "lm", col = "#C42126")
+#logJpressure_scat <- ggplot(traffic, aes(x = logpressure, y = TrafficIndexLive)) + geom_point() + stat_smooth(method = "lm", col = "#C42126")
+
+logJamsDelay_scat
+logJamsLength_scat
+logJamsCount_scat
+#logrelativeHumidity_scat
+#logJpressure_scat
+```
+
+
+
+```{r}
+mlr <- lm(traffic$TrafficIndexLive ~ JamsDelay + logJamsCount + Weather.relativeHumidity + WindSouth + Weather.relativeHumidity, traffic)
+
+summary(mlr)
+```
+
+```{r}
+trafficsets = sort(sample(nrow(traffic), nrow(traffic) * 0.7))
+train <- traffic[trafficsets,]
+valid <- traffic[-trafficsets,]
+
+train
+valid
+```
+
+```{r}
+mlr.train <- lm(train$TrafficIndexLive ~ JamsDelay + logJamsCount + Weather.relativeHumidity + WindSouth + Weather.relativeHumidity, train)
+
+summary(mlr.train)
+```
+
+```{r}
+mlr.valid <- lm(valid$TrafficIndexLive ~ JamsDelay + logJamsCount + Weather.relativeHumidity + WindSouth + Weather.relativeHumidity, valid)
+
+summary(mlr.valid)
+```
+
